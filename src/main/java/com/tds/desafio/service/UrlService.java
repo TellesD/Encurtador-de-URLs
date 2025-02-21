@@ -63,9 +63,7 @@ public class UrlService {
         Optional<UrlModel> urlModel = Optional.ofNullable(repository.findByShortUrl(shortUrl));
 
         if (urlModel.isPresent()) {
-            UrlModel url = urlModel.get();
-            url.setTotalView(url.getTotalView() + 1);
-            url.setUpdateDate(LocalDateTime.now());
+            UrlModel url = UrlMapper.toUrlModel(urlModel.get());
             repository.save(url);
             return url.getUrl();
         }
@@ -80,7 +78,6 @@ public class UrlService {
 
             if (url != null) {
                 long daysBetween = ChronoUnit.DAYS.between(url.getCreateDate(), LocalDateTime.now());
-                System.out.println(daysBetween);
                 double averageViewsPerDay = (daysBetween > 0) ? (double) url.getTotalView() / daysBetween + 1 : url.getTotalView();
                 UrlResponseDto response = UrlResponseMapper.toResponse(url, averageViewsPerDay);
                 responseList.add(response);

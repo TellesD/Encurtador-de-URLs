@@ -16,4 +16,15 @@ public class UrlMapper {
                 0
         );
     }
+
+    public static UrlModel toUrlModel(UrlModel model) {
+        UrlModel urlModel = new UrlModel ();
+        urlModel.setId(model.getId());
+        urlModel.setUrl(model.getUrl());
+        urlModel.setShortUrl(model.getShortUrl());
+        urlModel.setUpdateDate(LocalDateTime.now());
+        urlModel.setCreateDate(model.getCreateDate());
+        urlModel.setTotalView(model.getTotalView()+1);
+        return urlModel;
+    }
 }
