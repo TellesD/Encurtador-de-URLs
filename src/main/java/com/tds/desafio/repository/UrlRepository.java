@@ -1,11 +1,11 @@
 package com.tds.desafio.repository;
 
-import com.tds.desafio.model.Url;
+import com.tds.desafio.model.UrlModel;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface UrlRepository extends MongoRepository<Url, String> {
+public interface UrlRepository extends MongoRepository<UrlModel, String> {
 
-    Url findByUrl(String url);
+    UrlModel findByUrl(String url);
+    UrlModel findByShortUrl(String url);
 
-    Url FindByShortUrl(String url);
 }
