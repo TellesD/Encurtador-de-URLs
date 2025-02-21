@@ -8,11 +8,12 @@ import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class UrlEditorController {
     @ApiResponse(responseCode = "201", description = "URL encurtada gerada com sucesso")
     @ApiResponse(responseCode = "400", description = "Erro ao encurtar a URL")
     @PostMapping()
-    public ResponseEntity<String> postUrl(@RequestBody UrlRequestDto input) {
+    public ResponseEntity<String> postUrl(@Valid @RequestBody UrlRequestDto input) {
 
         try {
             String shortUrl = this.service.shortUrl(input.getUrl());
@@ -59,7 +60,7 @@ public class UrlEditorController {
     @ApiResponse(responseCode = "200", description = "Estatísticas retornadas com sucesso")
     @ApiResponse(responseCode = "400", description = "Erro ao buscar estatísticas")
     @PostMapping("/statistic")
-    public ResponseEntity<List<UrlResponseDto>> getUrlsViewsStatistics(@RequestBody StatisticRequestDto input) {
+    public ResponseEntity<List<UrlResponseDto>> getUrlsViewsStatistics(@Valid @RequestBody StatisticRequestDto input) {
         try {
         List<UrlResponseDto> response = this.service.getUrlsViewsStatistics(input.getUrl());
         return ResponseEntity.ok(response);
@@ -67,5 +68,10 @@ public class UrlEditorController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno: " + e.getMessage());
     }
 }
